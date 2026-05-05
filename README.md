@@ -5,27 +5,36 @@
 - `Index.html`, `CSS.html`, `JS.html`: frontend modern responsive
 - `TemplateSPT.html`, `TemplateSPPD.html`, `TemplateLaporan.html`, `TemplateKwitansi.html`: template cetak
 
-## Setup Google Sheet
-Buat spreadsheet utama (untuk Apps Script) dengan sheet berikut:
-1. Database_Pegawai
-2. Absensi
-3. Anggaran
-4. Standar_Harga
-5. SPT
-6. SPT_Detail
-7. SPPD
-8. Laporan
-9. Kwitansi
-10. Monitoring
-11. Users
-12. Log_Aktivitas
-13. Setting
+## Setup Otomatis Sheet + Trigger (BARU)
+1. Buka spreadsheet utama → **Extensions → Apps Script**.
+2. Paste semua file proyek.
+3. Jalankan fungsi `setupApp()` sekali dari editor Apps Script.
+4. Fungsi ini otomatis:
+   - membuat seluruh sheet wajib jika belum ada,
+   - membuat header standar tiap sheet,
+   - memasang trigger time-driven `autoGenerateSheetsTrigger()` setiap 1 jam.
+5. Jika ada sheet terhapus/tidak lengkap header, trigger akan membangunkan ulang struktur otomatis.
 
-### Header minimal per sheet
+## Struktur sheet yang akan dibuat otomatis
+- Database_Pegawai
+- Absensi
+- Anggaran
+- Standar_Harga
+- SPT
+- SPT_Detail
+- SPPD
+- Laporan
+- Kwitansi
+- Monitoring
+- Users
+- Log_Aktivitas
+- Setting
+
+## Header minimal per sheet
 - `Users`: username, password, nama, role
-- `SPT`: nomor_spt, tanggal, dasar, maksud, tujuan, tanggal_berangkat, tanggal_kembali, lama_hari, sumber_dana, kegiatan, sub_kegiatan, objek_belanja, kode_rekening, catatan_pejabat
+- `SPT`: nomor_spt, tanggal, dasar, maksud, tujuan, berangkat_dari, tanggal_berangkat, tanggal_kembali, lama_hari, sumber_dana, kegiatan, sub_kegiatan, objek_belanja, kode_rekening, nama_kegiatan, catatan_pejabat
 - `SPT_Detail`: id_detail, nomor_spt, id_qr
-- `SPPD`: nomor_sppd, nomor_spt, pejabat_pemberi_tugas, tujuan, lama_hari, tanggal, rute, status_perjalanan
+- `SPPD`: nomor_sppd, nomor_spt, pejabat_pemberi_tugas, id_qr, nama, pangkat_golongan, jabatan, tujuan, lama_hari, anggaran, tanggal, rute, tanda_tangan, status_perjalanan
 - `Laporan`: id_laporan, nomor_sppd, dasar, tujuan, hasil, kesimpulan, saran, penutup
 - `Kwitansi`: id_kwitansi, nomor_spt, nomor_sppd, id_qr, penginapan, makan, uang_saku, transport, total, terbilang
 - `Monitoring`: id_qr, nomor_sppd, status_perjalanan, jumlah_perjalanan, tanggal_mulai, tanggal_selesai

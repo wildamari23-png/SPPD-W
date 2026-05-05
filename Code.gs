@@ -10,6 +10,56 @@ const CONFIG = {
   LOCKED_ABSENSI: ['SAKIT', 'IZIN', 'CUTI', 'ALPA']
 };
 
+
+const SHEET_SCHEMAS = {
+  Database_Pegawai: ['id_qr','nama','nip_gol','jabatan','status','lokasi_tugas','pangkat_golongan'],
+  Absensi: ['timestamp','tanggal','jam_masuk','jam_keluar','id_qr','nama','unit','shift','validator','catatan','keterangan'],
+  Anggaran: ['kegiatan','sub_kegiatan','objek_belanja','kode_rekening','nama_kegiatan','sumber_dana'],
+  Standar_Harga: ['kode_lokasi','penginapan','makan','uang_saku','transport'],
+  SPT: ['nomor_spt','tanggal','dasar','maksud','tujuan','berangkat_dari','tanggal_berangkat','tanggal_kembali','lama_hari','sumber_dana','kegiatan','sub_kegiatan','objek_belanja','kode_rekening','nama_kegiatan','catatan_pejabat'],
+  SPT_Detail: ['id_detail','nomor_spt','id_qr'],
+  SPPD: ['nomor_sppd','nomor_spt','pejabat_pemberi_tugas','id_qr','nama','pangkat_golongan','jabatan','tujuan','lama_hari','anggaran','tanggal','rute','tanda_tangan','status_perjalanan'],
+  Laporan: ['id_laporan','nomor_sppd','dasar','tujuan','hasil','kesimpulan','saran','penutup'],
+  Kwitansi: ['id_kwitansi','nomor_spt','nomor_sppd','id_qr','penginapan','makan','uang_saku','transport','total','terbilang'],
+  Monitoring: ['id_qr','nomor_sppd','status_perjalanan','jumlah_perjalanan','tanggal_mulai','tanggal_selesai'],
+  Users: ['username','password','nama','role'],
+  Log_Aktivitas: ['waktu','user','modul','aksi','data'],
+  Setting: ['key','value','file_id']
+};
+
+function setupApp(){
+  createMissingSheets_();
+  installAutoTrigger_();
+  return {ok:true, message:'Setup berhasil: sheet & trigger otomatis aktif.'};
+}
+
+function autoGenerateSheetsTrigger(){
+  createMissingSheets_();
+}
+
+function installAutoTrigger_(){
+  const fn='autoGenerateSheetsTrigger';
+  const exists=ScriptApp.getProjectTriggers().some(t=>t.getHandlerFunction()===fn);
+  if(!exists){
+    ScriptApp.newTrigger(fn).timeBased().everyHours(1).create();
+  }
+}
+
+function createMissingSheets_(){
+  const ss=SpreadsheetApp.openById(CONFIG.MAIN_SHEET_ID);
+  Object.keys(SHEET_SCHEMAS).forEach(name=>{
+    let sh=ss.getSheetByName(name);
+    const headers=SHEET_SCHEMAS[name];
+    if(!sh) sh=ss.insertSheet(name);
+    const current=sh.getLastRow()>0?sh.getRange(1,1,1,Math.max(sh.getLastColumn(),headers.length)).getValues()[0]:[];
+    const hasHeader=headers.every((h,i)=>String(current[i]||'').toLowerCase()===h.toLowerCase());
+    if(!hasHeader){
+      sh.getRange(1,1,1,headers.length).setValues([headers]);
+      sh.setFrozenRows(1);
+    }
+  });
+}
+
 function doGet() {
   const t = HtmlService.createTemplateFromFile('Index');
   return t.evaluate().setTitle(CONFIG.APP_NAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
