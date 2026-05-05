@@ -1,0 +1,16 @@
+<style>
+:root{--biru:#1769aa;--kuning:#f8c436;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}body{background:var(--bg);margin:0}
+.card{background:var(--card);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:20px;transition:.2s}
+.card:hover{transform:translateY(-2px)}
+.login-card{max-width:420px;margin:8vh auto}.hidden{display:none}
+input,select,textarea,button{width:100%;padding:10px;margin:6px 0;border:1px solid #d7deea;border-radius:10px}
+.btn-primary,button{background:var(--biru);color:#fff;border:none;cursor:pointer;transition:.2s}button:hover{filter:brightness(1.08)}
+header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(120deg,var(--biru),#2d8fdd);color:#fff;padding:14px 16px}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;padding:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;padding:12px}
+.stat{background:#fff;border-left:6px solid var(--kuning);padding:12px;border-radius:12px}
+.badge{padding:2px 8px;border-radius:999px;font-size:12px}.danger{background:#ffd9d9;color:#9a0000}.warn{background:#fff2bf;color:#866100}.ok{background:#d9fce0;color:#0b7a2b}
+.table{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+@media(max-width:700px){header h2{font-size:18px}}
+</style>
